@@ -41,8 +41,8 @@ fn main() {
             timer = 0.0;
         }
 
-        fireworks.iter_mut().for_each(|f| f.update(dt, timer));
-        fireworks.iter_mut().for_each(|f| f.render(&mut d));
+        fireworks.update(dt, timer);
+        fireworks.render(&mut d);
 
         timer += 1.0;
     }
@@ -57,6 +57,14 @@ impl Fireworks {
 
     fn set_start_pos(&mut self, start_pos: Vector2) {
         self.0.iter_mut().for_each(|f| f.set_start_pos(start_pos));
+    }
+
+    fn update(&mut self, dt: f32, timer: f32) {
+        self.iter_mut().for_each(|f| f.update(dt, timer));
+    }
+
+    fn render(&mut self, d: &mut RaylibDrawHandle) {
+        self.iter_mut().for_each(|f| f.render(d));
     }
 
     fn generate_new_velocities(&mut self, rng: &mut ThreadRng) {
