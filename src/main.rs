@@ -2,10 +2,10 @@ use rand::rngs::ThreadRng;
 use rand::Rng;
 use raylib::prelude::*;
 
-const NUM_FIREWORKS: usize = 100;
+const NUM_FIREWORKS: usize = 150;
 const WINDOW_WIDTH: i32 = 1920;
 const WINDOW_HEIGHT: i32 = 1080;
-const LIFETIME: f32 = 250.0;
+const LIFETIME: f32 = 75.0;
 
 fn main() {
     let mut rng = rand::rng();
@@ -105,8 +105,8 @@ impl Firework {
     }
 
     fn update(&mut self, dt: f32, timer: f32) {
-        self.pos.x = self.pos.x + dt * self.vel.x;
-        self.pos.y = self.pos.y + dt * self.vel.y;
+        self.pos.x += dt * self.vel.x;
+        self.pos.y += dt * self.vel.y;
         self.color.a = (((self.lifetime - timer * 5.0) / self.lifetime) * 255.0 + 1000.0)
             .clamp(0.0, 255.0) as u8;
     }
@@ -126,19 +126,20 @@ impl Firework {
 
 fn random_velocity(rng: &mut ThreadRng) -> Vector2 {
     let mag = random_velocity_component(rng);
-    let x = random_velocity_component(rng);
-    let y = random_velocity_component(rng);
-    let mut v: Vector2 = Vector2::new(x, y);
+    let mut v: Vector2 = Vector2::new(
+        random_velocity_component(rng),
+        random_velocity_component(rng),
+    );
 
     v.normalize();
-    v = v * mag;
+    v *= mag;
     v
 }
 
 fn random_velocity_component(rng: &mut ThreadRng) -> f32 {
     if rng.random_bool(0.5) {
-        rng.random_range(-70.0..=40.0)
+        rng.random_range(-150.0..=90.0)
     } else {
-        rng.random_range(40.0..=70.0)
+        rng.random_range(90.0..=140.0)
     }
 }
