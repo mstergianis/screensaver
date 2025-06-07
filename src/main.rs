@@ -125,21 +125,10 @@ impl Firework {
 }
 
 fn random_velocity(rng: &mut ThreadRng) -> Vector2 {
-    let mag = random_velocity_component(rng);
-    let mut v: Vector2 = Vector2::new(
-        random_velocity_component(rng),
-        random_velocity_component(rng),
-    );
-
-    v.normalize();
-    v *= mag;
-    v
-}
-
-fn random_velocity_component(rng: &mut ThreadRng) -> f32 {
-    if rng.random_bool(0.5) {
-        rng.random_range(-150.0..=90.0)
-    } else {
-        rng.random_range(90.0..=140.0)
-    }
+    let dir = rng.random_range(0.0..=2.0* std::f32::consts::PI);
+    let mag = rng.random_range(50.0..=150.0);
+    Vector2::new(
+        mag * dir.cos(),
+        mag * dir.sin(),
+    )
 }
